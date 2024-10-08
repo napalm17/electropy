@@ -4,26 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7944f8a9-c5bb-4619-b69d-49c272420b97" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/electropy.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LeonardWiechert.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/charges/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/charges/bound_charge.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/charges/charge.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/charges/free_charge.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/helpers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inertial_frame_tranforms/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inertial_frame_tranforms/field_transformations.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inertial_frame_tranforms/system_transformer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inertial_frame_tranforms/vector_transformations.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+    <list default="true" id="7944f8a9-c5bb-4619-b69d-49c272420b97" name="Changes" comment="1.1. Debugged transformations.">
+      <change afterPath="$PROJECT_DIR$/Visualizer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/charge_fields.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LeonardWiechert.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/charges/bound_charge.py" beforeDir="false" afterPath="$PROJECT_DIR$/charges/bound_charge.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/charges/charge.py" beforeDir="false" afterPath="$PROJECT_DIR$/charges/charge.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/charges/free_charge.py" beforeDir="false" afterPath="$PROJECT_DIR$/charges/free_charge.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spacetime_transforms/field_transformations.py" beforeDir="false" afterPath="$PROJECT_DIR$/spacetime_transforms/field_transformations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spacetime_transforms/system_transformer.py" beforeDir="false" afterPath="$PROJECT_DIR$/spacetime_transforms/system_transformer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spacetime_transforms/vector_transformations.py" beforeDir="false" afterPath="$PROJECT_DIR$/spacetime_transforms/vector_transformations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/system.py" beforeDir="false" afterPath="$PROJECT_DIR$/system.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +34,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;napalm17&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/napalm17/electropy.git&quot;,
+    &quot;accountId&quot;: &quot;07368c36-e7bf-46e9-99e0-57ac89893c1c&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -49,16 +55,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.charge.executor": "Run",
-    "Python.scalar_field.executor": "Run",
-    "Python.system.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.charge.executor&quot;: &quot;Run&quot;,
+    &quot;Python.helpers.executor&quot;: &quot;Run&quot;,
+    &quot;Python.scalar_field.executor&quot;: &quot;Run&quot;,
+    &quot;Python.system.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/inertial_frame_tranforms" />
@@ -80,6 +87,28 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/charges/charge.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="helpers" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="electropy" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/helpers.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -157,6 +186,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.helpers" />
         <item itemvalue="Python.system" />
         <item itemvalue="Python.scalar_field" />
       </list>
@@ -178,6 +208,23 @@
       <option name="presentableId" value="Default" />
       <updated>1727929048567</updated>
     </task>
+    <task id="LOCAL-00001" summary="1.0">
+      <option name="closed" value="true" />
+      <created>1728284485035</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1728284485035</updated>
+    </task>
+    <task id="LOCAL-00002" summary="1.1. Debugged transformations.">
+      <option name="closed" value="true" />
+      <created>1728350683310</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1728350683310</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -190,5 +237,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="1.0" />
+    <MESSAGE value="1.1. Debugged transformations." />
+    <option name="LAST_COMMIT_MESSAGE" value="1.1. Debugged transformations." />
   </component>
 </project>

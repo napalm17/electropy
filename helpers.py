@@ -2,51 +2,58 @@ import numpy as np
 
 
 class Utils:
+
+    @staticmethod
+    def scalars_to_grid(scalars: np.ndarray, grid_shape: tuple) -> np.ndarray:
+        if scalars.ndim != 1:
+            raise ValueError("Input must be a 1D array of scalars.")
+        if scalars.shape[0] != np.prod(grid_shape):
+            raise ValueError("The number of scalars must match the number of points in the grid.")
+        return scalars.reshape(grid_shape)
+
+    @staticmethod
+    def grid_to_vectors(grid: np.ndarray) -> np.ndarray:
+        xx, yy, zz = grid
+        return np.column_stack((xx.ravel(), yy.ravel(), zz.ravel()))
+
+    @staticmethod
+    def vectors_to_grid(vectors: np.ndarray, shape: tuple) -> np.ndarray:
+        if vectors.shape[0] != np.prod(shape):
+            raise ValueError("The number of vectors must match the number of points in the grid.")
+        # Reshape the vectors to get the original grid shape
+        xx = vectors[:, 0].reshape(shape)
+        yy = vectors[:, 1].reshape(shape)
+        zz = vectors[:, 2].reshape(shape)
+        return xx, yy, zz
+
     @staticmethod
     def skew(vector: np.ndarray) -> np.ndarray:
-        """
-        Parameters:
-        vector : np.ndarray
-        Returns:
-        np.ndarray
-            A 3x3 skew-symmetric matrix.
-        """
         x, y, z = vector
         return np.array([
             [0, -z, y],
             [z, 0, -x],
-            [-y, x, 0]
-        ])
+            [-y, x, 0]])
 
     @staticmethod
-    def zero_field(dimension):
+    def zero_field(dimension: int) -> callable:
         return lambda position, time: np.zeros(dimension)
 
     @staticmethod
-    def get_lorentz_force(e_field, b_field, v, q):
+    def equations_of_motion(t, y: np.ndarray, acceleration: np.ndarray) -> np.ndarray:
+        position = y[0:3]  # Assuming y contains position in the first 3 elements
+        velocity = y[3:6]  # Assuming y contains velocity in the last 3 elements
+        return np.concatenate((velocity, acceleration))
+
+    @staticmethod
+    def get_lorentz_force(e_field: np.ndarray, b_field: np.ndarray, v: np.ndarray, q: float) -> np.ndarray:
         return q * (e_field + np.cross(v, b_field))
 
     @staticmethod
-    def get_acceleration_from_force(force, mass, gamma, beta):
-        """
-        Calculate acceleration based on the applied force.
-        :param force: Force to apply.
-        :return: Acceleration vector.
-        """
+    def get_acceleration_from_force(force: np.ndarray, mass: float, gamma: float, beta: np.ndarray) -> np.ndarray:
         return force / (mass * gamma * (1 - np.vdot(beta, beta)/gamma**2))
-
 
     @staticmethod
     def gaussian1D(x, sigma=1, mu=0):
-        """
-        Parameters:
-        x (float or np.ndarray): The input value(s) for which to compute the Gaussian.
-        sigma (float): The standard deviation of the Gaussian.
-        mu (float): The mean (center) of the Gaussian.
-
-        Returns:
-        float or np.ndarray: The computed Gaussian value(s).
-        """
         x = np.asarray(x)
         coeff = 1 / (sigma * np.sqrt(2 * np.pi))
         exponent = -0.5 * ((x - mu) / sigma) ** 2
@@ -54,7 +61,6 @@ class Utils:
 
     @staticmethod
     def gaussian3D(x_range, y_range, z_range, mu, sigma):
-        """Returns the joint Gaussian distribution over 3D space."""
         # Create a 3D grid
         X, Y, Z = np.meshgrid(x_range, y_range, z_range, indexing='ij')
         # Compute Gaussian distribution along each axis using broadcasting
@@ -64,26 +70,17 @@ class Utils:
         return np.prod(gaussian_distributions, axis=0)
 
     @staticmethod
-    def linear_interpolate(x_data, y_data, x):
-        """
-        Compute the interpolated value of y at a given x using linear interpolation.
-
-        Parameters:
-        x_data (np.ndarray): The array of x values.
-        y_data (np.ndarray): The array of y values corresponding to x_data.
-        x (float): The x value for which to compute the interpolated y value.
-
-        Returns:
-        float: The interpolated y value.
-        """
-        # Check if x is outside the range of x_data
-        #if not (x_data[0] <= x <= x_data[-1]):
-        #    print(x_data, x)
-        #    raise ValueError(f'Value {x} not in function domain.')
+    def linear_interpolate(x_data: np.ndarray, y_data: np.ndarray, x) -> np.ndarray:
         return np.array([np.interp(x, x_data, y_data[:, i]) for i in range(y_data.shape[1])])
 
-        #for i in range(len(x_data) - 1):
 
-         #   if x_data[i] <= x <= x_data[i + 1]:
-          #      return y_data[i] + (y_data[i + 1] - y_data[i]) * (x - x_data[i]) / (x_data[i + 1] - x_data[i])
+#print(freed.positions)
+x_range = np.linspace(-5, 5, 10)  # 10 points from -5 to 5 in x
+y_range = np.linspace(-5, 5, 10)  # 10 points from -5 to 5 in y
+z_range = np.linspace(-5, 5, 10)  # 10 points from -5 to 5 in z
+grid = np.meshgrid(x_range, y_range, z_range, indexing='ij')
+# Initialize the Test Charge
+positions = Utils.grid_to_vectors(grid)
+grid2 = Utils.vectors_to_grid(positions, grid[0].shape)
 
+print(np.allclose(grid, grid2))

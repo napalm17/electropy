@@ -32,59 +32,37 @@ class Charge(ABC):
     def times(self):
         pass
 
-    def beta(self, time=None):
+    def beta(self, time=None) -> np.ndarray:
         time = time if time else self.times[-1]
         return self.velocity(time) / c
 
-    def gamma(self, time=None):
+    def gamma(self, time=None) -> float:
         time = time if time else self.times[-1]
         beta_magnitude = np.linalg.norm(self.beta(time))
         if beta_magnitude > 1:
             raise ValueError("Velocity cannot greater than the speed of light.")
         return 1 / np.sqrt(1 - beta_magnitude ** 2)  # Calculate gamma
 
-    def position(self, time=None):
-        """
-        :param time: If provided, interpolate to get the position at the specific time.
-        :return: The position as a (1, 3) array [x, y, z].
-        """
+    def position(self, time=None) -> np.ndarray:
         if time is not None:
-            return Utils.linear_interpolate(self.times, self.positions, time).flatten()
+            return Utils.linear_interpolate(self.times, self.positions, time).T
         return self.positions[-1]
 
-    def velocity(self, time=None):
-        """
-        :param time: If provided, interpolate to get the velocity at the specific time.
-        :return: The velocity as a (1, 3) array [vx, vy, vz].
-        """
+    def velocity(self, time=None) -> np.ndarray:
         if time is not None:
-            return Utils.linear_interpolate(self.times, self.velocities, time).flatten()
+            return Utils.linear_interpolate(self.times, self.velocities, time).T
         return self.velocities[-1]
 
-    def acceleration(self, time=None):
-        """
-        :param time: If provided, interpolate to get the acceleration at the specific time.
-        :return: The acceleration as a (1, 3) array [ax, ay, az].
-        """
+    def acceleration(self, time=None) -> np.ndarray:
         if time is not None:
-            return Utils.linear_interpolate(self.times, self.accelerations, time).flatten()
+            return Utils.linear_interpolate(self.times, self.accelerations, time).T
         return self.accelerations[-1]
 
-    def density(self, x, y, z, time: float, sigma=0.01):
-        """
-        :param time: Time at which the density will be evaluated.
-        :param sigma: The standard deviation of the Gaussian.
-        :return: A 4D grid representing the charge density field in space-time.
-        """
+    def density(self, x, y, z, time: float, sigma=0.01) -> np.ndarray:
         density_array = self.magnitude * Utils.gaussian3D(x, y, z, sigma=sigma, mu=self.position(time))
         return density_array
 
-    def current_density(self, x, y, z, time):
-        """
-        Compute the current density at a specific time and location.
-        :param time: The time at which the current density is evaluated.
-        :return: A 4D grid representing the current density field in space-time.
-        """
+    def current_density(self, x, y, z, time) -> np.ndarray:
         current_density_array = self.density(x, y, z, time) * self.velocity(time)
         return current_density_array
 
