@@ -1,5 +1,5 @@
 import numpy as np
-from vector_transformations import Transformations
+from spacetime_transforms import Transformations
 from scipy.constants import c
 
 class FieldTransforms:
@@ -9,10 +9,10 @@ class FieldTransforms:
         rotation_matrix = Transformations.rotation_matrix(axis, angle)
 
         def E_prime(pos, t):
-            return np.vdot(rotation_matrix, E(pos, t))
+            return np.dot(rotation_matrix, E(pos, t))
 
         def B_prime(pos, t):
-            return np.vdot(rotation_matrix, B(pos, t))
+            return np.dot(rotation_matrix, B(pos, t))
 
         return E_prime, B_prime
 

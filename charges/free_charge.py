@@ -6,15 +6,22 @@ from helpers import Utils
 
 
 class FreeCharge(Charge):
-    def __init__(self, initial_position, initial_velocity, initial_time=0, mass=1.0, magnitude=1.0):
+    def __init__(self, initial_position=None, initial_velocity=None, initial_time=None, mass=1.0, magnitude=1.0, old_values=None):
         """
         Initialize a free-moving charge.
         """
         super().__init__(mass=mass, magnitude=magnitude)
-        self._positions = np.array([initial_position])
-        self._velocities = np.array([initial_velocity])
-        self._accelerations = np.array([[0, 0, 0]])  # Start with zero acceleration
-        self._times = np.array([initial_time])
+        if old_values is not None:
+            old_t, old_pos, old_vel, old_acc = old_values
+            self._positions = old_pos
+            self._velocities = old_vel
+            self._accelerations = old_acc
+            self._times = old_t
+        else:
+            self._positions = np.array([initial_position])
+            self._velocities = np.array([initial_velocity])
+            self._accelerations = np.array([[0, 0, 0]])
+            self._times = np.array([initial_time])
 
     @property
     def positions(self):
@@ -61,10 +68,9 @@ class FreeCharge(Charge):
         """
         self._accelerations = np.vstack((self._accelerations, new_acceleration))
 
-    def equations_of_motion(self, t, y, force):
+    def equations_of_motion(self, t, y, acceleration):
         position = y[0:3]  # Assuming y contains position in the first 3 elements
         velocity = y[3:6]  # Assuming y contains velocity in the last 3 elements
-        acceleration = Utils.get_acceleration_from_force(force, self.mass, self.gamma(), self.beta())
         return np.concatenate((velocity, acceleration))
 
     def evolve_infinitesimal(self, dt, force):
@@ -76,7 +82,9 @@ class FreeCharge(Charge):
         initial_conditions = np.concatenate((self.position(), self.velocity()))
         t_span = (self.times[-1], self.times[-1] + dt)
         t_eval = [self.times[-1] + dt]  # We want to evaluate only at the new time point
-        solution = solve_ivp(self.equations_of_motion, t_span, initial_conditions, args=(force,), t_eval=t_eval)
+        a = Utils.get_acceleration_from_force(force, self.mass, self.gamma(), self.beta())
+        self._update_acceleration(a)
+        solution = solve_ivp(self.equations_of_motion, t_span, initial_conditions, args=(a,), t_eval=t_eval)
         self._update_position(solution.y[0:3, -1])  # New position
         self._update_velocity(solution.y[3:6, -1])  # New velocity
         self._update_time(solution.t[-1])  # New time

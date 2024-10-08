@@ -35,11 +35,10 @@ class BoundCharge(Charge):
         """
         return np.gradient(self.velocities, self._time_domain, axis=0)
 
-    def set_free(self, time=None):
+    def set_free(self):
         """
-        Switch this charge to a free-moving charge at a specific time.
-        :param time: The time at which to switch.
+        Set this charge free at the end of its trajectory .
         :return: A FreeCharge instance with initial conditions set from the current state of the BoundCharge.
         """
-        time = time if time else self.times[-1]
-        return FreeCharge(self.position(time), self.velocity(time), 0, self.mass, self.magnitude)
+        old_values = self.times, self.positions, self.velocities, self.accelerations
+        return FreeCharge(mass=self.mass, magnitude=self.magnitude, old_values=old_values)

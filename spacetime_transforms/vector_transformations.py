@@ -2,6 +2,7 @@ import numpy as np
 from scipy.constants import c
 from helpers import Utils
 
+
 class Transformations:
     @staticmethod
     def transform_fields(E, B, v):
@@ -98,8 +99,11 @@ class Transformations:
         Returns:
             Transformed 4-vector (x', y', z', t') as arrays.
         """
+
         vector4d = np.array([c*t, x, y, z])
         ct_prime, x_prime, y_prime, z_prime = np.dot(Transformations.boost_matrix(velocity), vector4d)
+        if isinstance(t, float):
+            print(ct_prime, 'vec4')
         return np.array([ct_prime / c, x_prime, y_prime, z_prime])
 
     @staticmethod
@@ -119,7 +123,6 @@ class Transformations:
         axis = axis / np.linalg.norm(axis)  # Normalize the axis
         axis_skew = Utils.skew(axis)  # Get skew-symmetric matrix of the axis
         return np.eye(3) + np.sin(angle) * axis_skew + (1 - np.cos(angle)) * np.dot(axis_skew, axis_skew)
-
 
 
     @staticmethod

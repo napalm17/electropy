@@ -1,4 +1,4 @@
-from charges.charge import Charge
+from charges import Charge
 from scipy.constants import c
 import numpy as np
 

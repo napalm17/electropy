@@ -1,6 +1,5 @@
 import numpy as np
-from charges.free_charge import FreeCharge
-from charges.bound_charge import BoundCharge
+from charges import FreeCharge, BoundCharge
 from LeonardWiechert import LW
 from scipy.constants import epsilon_0, mu_0, c
 from numpy.linalg import norm
@@ -12,8 +11,9 @@ class System:
     def __init__(self, ranges=None, charges=None, e_field=Utils.zero_field(3), b_field=Utils.zero_field(3), init_time=0):
         self.charges: list[BoundCharge or FreeCharge] = [] if charges is None else charges
         self.external_fields = {'electric_field': e_field, 'magnetic_field': b_field}
-        self.time = init_time
+        self.time: float = init_time
         self.ranges = ranges
+        print(self.time)
 
     @property
     def free_charges(self):
@@ -45,7 +45,8 @@ class System:
         self.charges.append(charge)
 
     def add_field(self, func, field_type):
-        self.external_fields[field_type].append(func)
+        old_field = self.external_fields[field_type]
+        self.external_fields[field_type] = lambda pos, t: old_field(pos, t) + func(pos, t)
 
     def get_charge_density(self, position, time):
         """Apply the superposition principle to obtain the total charge density."""
@@ -57,10 +58,11 @@ class System:
         return np.sum([charge.current_density(x, y, z, time) for charge in self.charges], axis=0)
 
     def _sum_fields(self, position, time, field_type):
+
         charge_field = np.sum([getattr(LW(charge, position, time), field_type)() for charge in self.charges], axis=0)
-        external_field = np.zeros_like(charge_field)
+        external_field = np.zeros(3)
         if field_type in ["electric_field", "magnetic_field"]:
-            external_field += np.sum([field(position, time) for field in self.external_fields[field_type]], axis=0)
+            external_field += self.external_fields[field_type](position, time)
         return charge_field + external_field
 
     def scalar_potential(self, position, time):
@@ -88,11 +90,10 @@ class System:
         self.charges.insert(charge_index, charge)
         return Utils.get_lorentz_force(e_field, b_field, charge.velocity(time), charge.magnitude)
 
-
     def set_charge_free(self, index: int):
         if isinstance(self.charges[index], BoundCharge):
             old = self.charges.pop(index)
-            new = old.set_free(self.time)
+            new = old.set_free()
             self.charges.insert(index, new)
 
     def _evolve_infinitesimal(self, dt=0.1):
@@ -102,19 +103,12 @@ class System:
 
     def evolve_by(self, time, dt=0.01):
         """Evolves the system forward by a time step dt."""
-        iterations = int(time // dt)
+        iterations = int(time / dt)
         for _ in range(iterations):
-            print('------------')
-            try:
-                #print(self.charge_positions[-1])
-                print(self.charge_velocities[-1] / c)
-
-            except:
-                raise ValueError('a')
-
             self._evolve_infinitesimal(dt)
             self._handle_charge_collision()
             self.time += dt
+
 
     def _handle_charge_collision(self):
         for charge1 in self.free_charges:
@@ -130,42 +124,9 @@ class System:
         print("System reset to vacuum state.")
 
 
-t = np.linspace(-5, 100, 100)
-w = 1
-x = 10 * np.cos(w * t / (2 * np.pi))
-y = np.zeros_like(t)
-z = np.zeros_like(t)
-charge1 = BoundCharge(y, y, z, t, 1, 1)
-charge2 = BoundCharge(-y + 20, y, z, t, 1, 1)
-
-freed = FreeCharge((0, 0, 0), (0, 0.9*c, 0), magnitude=100)
-#freed2 = FreeCharge((10,0,0), (0,0,0), magnitude=100)
 
 
-sys = System()
-#sys.add_charge(charge1)
-#sys.add_charge(charge2)
-sys.add_charge(freed)
-#sys.add_charge(freed2)
-sys.add_field(lambda position, time: np.array([0, 0, 0]), 'electric_field')
-#sys.add_field(lambda r, t: np.array([0,0,1]), 'magnetic_field')
 
-#print(freed.positions)
-
-
-from contextlib import contextmanager
-import time
-
-@contextmanager
-def timing():
-    start_time = time.time()
-    yield
-    end_time = time.time()
-    print(f"Elapsed time: {end_time - start_time:.6f} seconds")
-
-# Usage example
-with timing():
-    sys.evolve_by(5)
 
 
 

@@ -76,14 +76,7 @@ class Utils:
         Returns:
         float: The interpolated y value.
         """
-        # Check if x is outside the range of x_data
-        #if not (x_data[0] <= x <= x_data[-1]):
-        #    print(x_data, x)
-        #    raise ValueError(f'Value {x} not in function domain.')
+
         return np.array([np.interp(x, x_data, y_data[:, i]) for i in range(y_data.shape[1])])
 
-        #for i in range(len(x_data) - 1):
-
-         #   if x_data[i] <= x <= x_data[i + 1]:
-          #      return y_data[i] + (y_data[i + 1] - y_data[i]) * (x - x_data[i]) / (x_data[i + 1] - x_data[i])
 

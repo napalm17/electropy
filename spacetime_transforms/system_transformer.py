@@ -1,7 +1,6 @@
 from system import System
 from charges import FreeCharge, BoundCharge
-from vector_transformations import Transformations
-from inertial_frame_tranforms.field_transformations import FieldTransforms
+from spacetime_transforms import Transformations, FieldTransforms
 
 class SystemTransformer:
     def __init__(self, system: System, velocity=None, distance=None, orientation=None):
@@ -18,7 +17,7 @@ class SystemTransformer:
         self.velocity = velocity
         self.distance = distance
         self.orientation = orientation
-        self.axis, self.angle = self.orientation if self.orientation is not None else None, None
+        self.axis, self.angle = self.orientation if self.orientation is not None else (None, None)
 
     def __repr__(self):
         return (f"Transformer(system={self.new_system}, velocity={self.velocity}, "
@@ -32,12 +31,14 @@ class SystemTransformer:
         """
         Placeholder method for applying the transformations.
         """
-        if self.velocity:
+        if self.velocity is not None:
             self.boost_system()
-        if self.orientation:
+        if self.orientation is not None:
             self.rotate_system()
-        if self.distance:
+        if self.distance is not None:
             self.translate_system()
+
+        return self.new_system
 
     def apply_transformation(self, transformation_fn_charges, transformation_fn_fields, new_time):
         """
@@ -52,7 +53,9 @@ class SystemTransformer:
         self.new_system = System(charges=new_charges, e_field=new_e_field, b_field=new_b_field, init_time=new_time)
 
     def boost_system(self):
-        new_time = Transformations.boost(self.new_system.time, 0, 0, 0, self.velocity)
+        print(self.new_system.time, 'transformer')
+        new_time = Transformations.boost(self.new_system.time, 0, 0, 0, self.velocity)[0]
+        print(new_time)
         self.apply_transformation(self.get_boosted_charges, self.get_boosted_fields, new_time)
 
     def rotate_system(self):
