@@ -4,18 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7944f8a9-c5bb-4619-b69d-49c272420b97" name="Changes" comment="1.1. Debugged transformations.">
-      <change afterPath="$PROJECT_DIR$/Visualizer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/charge_fields.py" afterDir="false" />
+    <list default="true" id="7944f8a9-c5bb-4619-b69d-49c272420b97" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LeonardWiechert.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/charges/bound_charge.py" beforeDir="false" afterPath="$PROJECT_DIR$/charges/bound_charge.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/charges/charge.py" beforeDir="false" afterPath="$PROJECT_DIR$/charges/charge.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/charges/free_charge.py" beforeDir="false" afterPath="$PROJECT_DIR$/charges/free_charge.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Visualizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/charge_fields.py" beforeDir="false" afterPath="$PROJECT_DIR$/charges/charge_fields.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/charges/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/charges/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spacetime_transforms/field_transformations.py" beforeDir="false" afterPath="$PROJECT_DIR$/spacetime_transforms/field_transformations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spacetime_transforms/system_transformer.py" beforeDir="false" afterPath="$PROJECT_DIR$/spacetime_transforms/system_transformer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spacetime_transforms/vector_transformations.py" beforeDir="false" afterPath="$PROJECT_DIR$/spacetime_transforms/vector_transformations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/system.py" beforeDir="false" afterPath="$PROJECT_DIR$/system.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
@@ -68,8 +62,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/inertial_frame_tranforms" />
       <recent name="$PROJECT_DIR$/charges" />
+      <recent name="$PROJECT_DIR$/inertial_frame_tranforms" />
     </key>
   </component>
   <component name="RunManager" selected="Python.test">
@@ -224,7 +218,23 @@
       <option name="project" value="LOCAL" />
       <updated>1728350683310</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="1.1. Debugged transformations.">
+      <option name="closed" value="true" />
+      <created>1728370089364</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1728370089364</updated>
+    </task>
+    <task id="LOCAL-00004" summary="1.2. Strong typing, vectorized methods.">
+      <option name="closed" value="true" />
+      <created>1728370138019</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1728370138019</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -240,7 +250,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="1.0" />
+    <MESSAGE value="1.1. Strong typing introduced, methods vectorized." />
+    <MESSAGE value="1.1. Strong typing, vectorized methods." />
     <MESSAGE value="1.1. Debugged transformations." />
-    <option name="LAST_COMMIT_MESSAGE" value="1.1. Debugged transformations." />
+    <MESSAGE value="1.2. Strong typing, vectorized methods." />
+    <option name="LAST_COMMIT_MESSAGE" value="1.2. Strong typing, vectorized methods." />
   </component>
 </project>

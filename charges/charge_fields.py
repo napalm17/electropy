@@ -52,7 +52,6 @@ class ChargeFields:
     def e_field_velocity_component(self) -> np.ndarray:
         num = self.charge.magnitude * (self.unit_direction - self.beta)
         denom = self.gamma ** 2 * (1 - np.sum(self.unit_direction * self.beta, axis=-1)) * np.linalg.norm(self.direction, axis=-1) ** 2
-        print(denom, num.shape, 'test')
         return num / np.atleast_1d(denom)[:, np.newaxis]
 
     def e_field_acceleration_component(self) -> np.ndarray:

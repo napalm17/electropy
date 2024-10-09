@@ -1,7 +1,6 @@
 import numpy as np
-from charges import FreeCharge, BoundCharge, Charge
-from charge_fields import ChargeFields
-from scipy.constants import epsilon_0, mu_0, c
+from charges import FreeCharge, BoundCharge, Charge, ChargeFields
+from scipy.constants import epsilon_0, mu_0
 from numpy.linalg import norm
 from helpers import Utils
 
@@ -12,6 +11,18 @@ class System:
         self.external_fields = {'electric_field': e_field, 'magnetic_field': b_field}
         self.time = init_time
         self.ranges = ranges
+
+    @property
+    def field_dict(self):
+        field_dict = {
+            "scalar_potential": self.scalar_potential,
+            "vector_potential": self.vector_potential,
+            "electric_field": self.E_field,
+            "magnetic_field": self.B_field,
+            "energy_density": self.energy_density,
+            "poynting_vector": self.poynting_vector,
+        }
+        return field_dict
 
     @property
     def free_charges(self) -> list[FreeCharge]:
@@ -35,7 +46,8 @@ class System:
         return charge1.magnitude * charge2.magnitude > 0
 
     @staticmethod
-    def are_close(charge1: Charge, charge2: Charge, tolerance=1e-1) -> bool:
+    def are_close(charge1: Charge, charge2: Charge, tolerance=1e-0) -> bool:
+        print(charge1.position(), charge2.position())
         return np.all(np.isclose(charge1.position(), charge2.position(), atol=tolerance))
 
     def add_charge(self, charge: Charge) -> None:
@@ -62,13 +74,14 @@ class System:
         iterations = int(time / dt)
         for _ in range(iterations):
             self._evolve_infinitesimal(dt)
-            self._handle_charge_collision()
+            #self._handle_charge_collision()
             self.time += dt
 
     def _handle_charge_collision(self) -> None:
         for charge1 in self.free_charges:
             for charge2 in self.charges:
-                if System.are_close(charge1, charge2) and not System.is_repelling(charge1, charge2):
+                print(System.are_close(charge1, charge2), not System.is_repelling(charge1, charge2))
+                if charge1 != charge2 and System.are_close(charge1, charge2) and not System.is_repelling(charge1, charge2):
                     self.charges.remove(charge1)
                     self.charges.remove(charge2)
 
@@ -87,10 +100,10 @@ class System:
 
     def _sum_fields(self, position: np.ndarray, time: float, field_type: str) -> np.ndarray:
         charge_field = np.sum([getattr(ChargeFields(charge, position, time), field_type)() for charge in self.charges], axis=0)
-        external_field = np.zeros_like(charge_field)
+        external_field = np.zeros_like(position)
         if field_type in ["electric_field", "magnetic_field"]:
             external_field += self.external_fields[field_type](position, time)
-        return charge_field + external_field
+        return Utils.set_small_values_to_zero(charge_field + external_field)
 
     def scalar_potential(self, position: np.ndarray, time: float) -> np.ndarray:
         return self._sum_fields(position, time, "scalar_potential")

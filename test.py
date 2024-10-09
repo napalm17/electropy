@@ -4,46 +4,46 @@ from system import System
 import numpy as np
 from scipy.constants import c
 from helpers import Utils
+from visualizer import Visualizer
 
-t = np.linspace(-5, 100, 100)
-w = 1
-x = 10 * np.cos(w * t / (2 * np.pi))
-y = np.zeros_like(t)
+t = np.linspace(0, 10, 1000)
+w = 10
+T = 0.01
+x = 5 * np.cos(t * (2 * np.pi) * w)
+y = -5 * np.cos(t * (2 * np.pi) * w)
 z = np.zeros_like(t)
-charge1 = BoundCharge(x, y, z, t, 1, 1)
-charge2 = BoundCharge(-y + 20, y, z, t, 1, 1)
+charge1 = BoundCharge(x, y, z, t, 100, 1)
 
-freed = FreeCharge((0, 0, 1), (0, 0.2*c, 0), initial_time=0, magnitude=100)
-freed2 = FreeCharge((10,0,0), (0,0,0), initial_time=0, magnitude=-12)
+
+charge2 = BoundCharge(-x, y, z, t, 100, 1)
+
+freed = FreeCharge((0, 0, 4), (0,0, 0), initial_time=0, magnitude=-25, mass=1)
+freed2 = FreeCharge((5,0,2), (0,0,-10), initial_time=0, magnitude=-25)
+freed3 = FreeCharge((0, 0, 5), (0,0, 0), initial_time=0, magnitude=-25, mass=100)
 
 
 sys = System()
 sys.add_charge(charge1)
-#sys.add_charge(freed)
+sys.add_charge(charge2)
+sys.add_charge(freed)
 sys.add_charge(freed2)
-sys.add_field(lambda position, time: np.array([0, 100, 0]), 'electric_field')
-sys.add_field(lambda r, t: np.array([0,0,1]), 'magnetic_field')
-
-#print(freed.positions)
-x_range = np.linspace(-5, 5, 10)  # 10 points from -5 to 5 in x
-y_range = np.linspace(-5, 5, 10)  # 10 points from -5 to 5 in y
-z_range = np.linspace(-5, 5, 10)  # 10 points from -5 to 5 in z
+#sys.add_field(lambda pos, time: np.array([0, 100, 0]), 'electric_field')
+sys.add_field(lambda pos, time: np.array([0,0,1]), 'magnetic_field')
+x_range = np.linspace(-5, 5, 5)  # 10 points from -5 to 5 in x
+y_range = np.linspace(-5, 5, 5)  # 10 points from -5 to 5 in y
+z_range = np.linspace(-5, 5, 5)  # 10 points from -5 to 5 in z
 grid = np.meshgrid(x_range, y_range, z_range, indexing='ij')
-
 # Initialize the Test Charge
 positions = Utils.grid_to_vectors(grid)
 # Initialize the System with the defined grid and the test charge
-sys.evolve_by(4)
+sys.evolve_by(2)
 # Evaluate electric and magnetic fields on the grid
 
-print('testing')
 
-electric_field = np.array(sys.E_field(positions, sys.time))
-magnetic_field = np.array(sys.scalar_potential(positions, sys.time))
-#print(grid[0].shape)
-# Print the resulting fields
-#print("Electric Field:\n", Utils.vectors_to_grid(electric_field, grid[0].shape).shape)
-#print("Magnetic Field:\n", Utils.scalars_to_grid(magnetic_field, grid[0].shape).shape)
+vis = Visualizer(sys)
+
+vis.animate('electric_field', time_interval=(0, 90), pos=positions)
+
 
 
 

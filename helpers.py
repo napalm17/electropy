@@ -4,6 +4,17 @@ import numpy as np
 class Utils:
 
     @staticmethod
+    def set_small_values_to_zero(arr: np.ndarray, threshold=1e-20) -> np.ndarray:
+        """Set values in the array that are smaller than the given threshold to zero in place.
+
+        Args:
+            arr (np.ndarray): The input array (modified in place).
+            threshold (float): The threshold below which values are set to zero.
+        """
+        arr[np.abs(arr) < threshold] = 0
+        return arr
+
+    @staticmethod
     def scalars_to_grid(scalars: np.ndarray, grid_shape: tuple) -> np.ndarray:
         if scalars.ndim != 1:
             raise ValueError("Input must be a 1D array of scalars.")
@@ -74,13 +85,3 @@ class Utils:
         return np.array([np.interp(x, x_data, y_data[:, i]) for i in range(y_data.shape[1])])
 
 
-#print(freed.positions)
-x_range = np.linspace(-5, 5, 10)  # 10 points from -5 to 5 in x
-y_range = np.linspace(-5, 5, 10)  # 10 points from -5 to 5 in y
-z_range = np.linspace(-5, 5, 10)  # 10 points from -5 to 5 in z
-grid = np.meshgrid(x_range, y_range, z_range, indexing='ij')
-# Initialize the Test Charge
-positions = Utils.grid_to_vectors(grid)
-grid2 = Utils.vectors_to_grid(positions, grid[0].shape)
-
-print(np.allclose(grid, grid2))
